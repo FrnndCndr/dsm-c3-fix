@@ -1,99 +1,100 @@
+import { Dish, getAllDishes } from "@/services/DishService";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-    FlatList,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Button,
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
-const dishes = [
-  {
-    id: "1",
-    name: "Double Angus & Bacon",
-    price: 15,
-    image: require("@/assets/images/baconcheeseburger.webp"),
-  },
-  {
-    id: "2",
-    name: "Spicy Angus Burger",
-    price: 13,
-    image: require("@/assets/images/spicyburger.webp"),
-  },
-  {
-    id: "3",
-    name: "Smokey BBQ Angus",
-    price: 19,
-    image: require("@/assets/images/smokedburger.jpg"),
-  },
-  // Puedes agregar más platillos aquí
+const CATEGORIES: Dish["category"][] = [
+  "main course",
+  "beverage",
+  "dessert",
+  "entree",
+  "snack",
 ];
 
-const drinks = [
-  {
-    id: "4",
-    name: "Coca Cola",
-    price: 3,
-    image: require("@/assets/images/cocacola.webp"),
-  },
-  {
-    id: "5",
-    name: "Sprite",
-    price: 3,
-    image: require("@/assets/images/sprite.jpg"),
-  },
-  {
-    id: "6",
-    name: "Fanta",
-    price: 3,
-    image: require("@/assets/images/fanta.jpg"),
-  },
-  // Puedes agregar más bebidas aquí
-];
-
-const desserts = [
-  {
-    id: "7",
-    name: "Chocolate Cake",
-    price: 5,
-    image: require("@/assets/images/chocolatecake.jpg"),
-  },
-  // Puedes agregar más postres aquí
-];
+const CATEGORY_LABELS: Record<Dish["category"], string> = {
+  "main course": "Platos Principales",
+  beverage: "Bebidas",
+  dessert: "Postres",
+  entree: "Entradas",
+  snack: "Snacks",
+};
 
 export default function MenuScreen() {
   const router = useRouter();
+  const [dishes, setDishes] = useState<Dish[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const renderItem = ({ item }: { item: any }) => (
+  const fetchDishes = async () => {
+    try {
+      const result = await getAllDishes();
+      setDishes(result);
+    } catch (error) {
+      console.error("Error cargando platos:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDishes();
+  }, []);
+
+  const renderItem = ({ item }: { item: Dish }) => (
     <TouchableOpacity
       style={styles.card}
       onPress={() => router.push(`/menu/${item.id}`)}
     >
-      <Image source={item.image} style={styles.image} />
+      <Image source={{ uri: item.image }} style={styles.image} />
       <Text style={styles.title}>{item.name}</Text>
       <Text style={styles.price}>${item.price}.00</Text>
     </TouchableOpacity>
   );
 
+  if (loading) {
+    return (
+      <View style={[styles.container, { justifyContent: "center" }]}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Special Burgers</Text>
-      <FlatList
-        data={dishes}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-      />
-      <Text style={styles.header}>Special Drinks</Text>
-      <FlatList
-        data={drinks}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-      />
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      {CATEGORIES.map((category) => {
+        const dishesInCategory = dishes.filter((d) => d.category === category);
+        if (dishesInCategory.length === 0) return null;
+
+        return (
+          <View key={category}>
+            <Text style={styles.header}>{CATEGORY_LABELS[category]}</Text>
+            <FlatList
+              data={dishesInCategory}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
+              numColumns={2}
+              scrollEnabled={false}
+            />
+          </View>
+        );
+      })}
+
+      <View style={{ marginTop: 40 }}>
+        <Button
+          title="Crear nuevo plato"
+          onPress={() => router.push("/admin/create-dish")}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
@@ -101,7 +102,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     backgroundColor: "#fff",
-    flex: 1,
   },
   header: {
     fontSize: 22,
@@ -122,8 +122,9 @@ const styles = StyleSheet.create({
   image: {
     height: 100,
     width: 150,
-    resizeMode: "contain",
+    resizeMode: "cover",
     marginBottom: 10,
+    borderRadius: 10,
   },
   title: {
     fontWeight: "600",
