@@ -1,50 +1,163 @@
-# Welcome to your Expo app 👋
+# 🍽️ CopperBites – DSM Cátedra 3
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Proyecto desarrollado para la Cátedra 3 de la materia **Desarrollo de Software para Móviles**. La app permite visualizar platos de un restaurante, ver detalles, crear nuevos con imagen incluida, y agruparlos por categoría.
 
-## Get started
+---
 
-1. Install dependencies
+## ✅ Paso a paso para ejecutar el proyecto
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1. Clonar el repositorio
 
 ```bash
-npm run reset-project
+git clone https://github.com/tuusuario/frnndcndr-dsm-c3-fix.git
+cd frnndcndr-dsm-c3-fix
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Instalar dependencias
 
-## Learn more
+```bash
+# Navegación y router
+npx expo install expo-router react-native-screens react-native-safe-area-context
 
-To learn more about developing your project with Expo, look at the following resources:
+# Picker de imágenes
+npx expo install expo-image-picker
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+# Async Storage
+npx expo install @react-native-async-storage/async-storage
 
-## Join the community
+# Dotenv para variables de entorno
+npm install dotenv
 
-Join our community of developers creating universal apps.
+# Axios para llamadas a la API
+npm install axios
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# Mapa de google cloud
+npx expo install expo-location
+npm install react-native-dotenv
+npm install react-native-maps-directions
+npx expo install react-native-maps
+```
+
+### 3. Configurar variables de entorno
+
+Crear un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+
+```env
+EXPO_PUBLIC_API_URL=http://192.168.X.X:3000/api
+```
+
+📌 Reemplazar `192.168.X.X` con la IP local de tu backend (importante si usás dispositivo físico).
+
+### 4. Ejecutar el proyecto
+
+```bash
+npx expo start
+```
+
+---
+
+## 🧰 Tecnologías utilizadas
+
+- **Expo + React Native**  
+- **Expo Router** (navegación basada en archivos)  
+- **Axios** (consumo de API REST)  
+- **Cloudinary** (subida de imágenes)  
+- **TypeScript**  
+- **React Native Paper** (UI)  
+- **AsyncStorage** (manejo de sesión)  
+
+---
+
+## 🧱 Estructura del proyecto
+
+```
+frnndcndr-dsm-c3-fix/
+├── README.md
+├── app.json
+├── babel.config.ts
+├── eslint.config.js
+├── package.json
+├── tsconfig.json
+├── app/
+│   ├── +not-found.tsx
+│   ├── _layout.tsx
+│   ├── contact.tsx
+│   ├── (tabs)/
+│   │   ├── _layout.tsx
+│   │   ├── explore.tsx
+│   │   ├── index.tsx
+│   │   ├── menu.tsx
+│   │   └── menu/
+│   │       └── [id].tsx
+│   ├── admin/
+│   │   └── create-dish.tsx
+│   └── auth/
+│       ├── login.tsx
+│       └── signup.tsx
+├── assets/
+│   ├── fonts/
+│   │   └── SpaceMono-Regular.ttf
+│   └── images/
+│       ├── baconcheeseburger.webp
+│       ├── cocacola.webp
+│       └── spicyburger.webp
+├── components/
+│   ├── Collapsible.tsx
+│   ├── ExternalLink.tsx
+│   ├── HapticTab.tsx
+│   ├── HelloWave.tsx
+│   ├── ParallaxScrollView.tsx
+│   ├── ThemedText.tsx
+│   ├── ThemedView.tsx
+│   ├── shared/
+│   │   ├── AppButton.tsx
+│   │   └── AppInput.tsx
+│   └── ui/
+│       ├── IconSymbol.ios.tsx
+│       ├── IconSymbol.tsx
+│       ├── TabBarBackground.ios.tsx
+│       └── TabBarBackground.tsx
+├── constants/
+│   └── Colors.ts
+├── contexts/
+│   └── AuthContext.tsx
+├── hooks/
+│   ├── useColorScheme.ts
+│   ├── useColorScheme.web.ts
+│   └── useThemeColor.ts
+├── scripts/
+│   └── reset-project.js
+└── services/
+    ├── api.ts
+    ├── AuthService.ts
+    ├── cloudinary.ts
+    └── DishService.ts
+```
+
+---
+
+## 💡 Funcionalidades implementadas
+
+- ✅ Navegación fluida entre pantallas con Expo Router
+- ✅ Agrupación de platos por categoría (main course, dessert, etc.)
+- ✅ Consumo de API backend con `axios`
+- ✅ Detalle dinámico de platos vía `GET /dishes/:id`
+- ✅ Creación de platos con imagen usando Cloudinary
+- ✅ Subida de imágenes desde galería con `expo-image-picker`
+- ✅ Diseño responsivo, limpio y adaptado a móviles
+- ✅ Autenticación y almacenamiento de token en `AsyncStorage`
+
+---
+
+## 📝 Observaciones
+
+> No se implementó carrito, mapa interactivo ni notificaciones, ya que el objetivo fue enfocarse en los aspectos principales solicitados por la rúbrica, garantizando fluidez, consumo de API, subida de imágenes y diseño consistente.
+
+---
+
+## 👨‍💻 Autor
+
+- **Nombre:** Fernando Condori Godoy
+- **Materia:** Desarrollo de Software para Móviles  
+- **Año:** 2025  
+- **Cátedra:** Cátedra 3
