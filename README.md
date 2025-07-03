@@ -149,15 +149,7 @@ frnndcndr-dsm-c3-fix/
 
 ---
 
-## 📝 Observaciones
-
-> No se implementó carrito, mapa interactivo ni notificaciones, ya que el objetivo fue enfocarse en los aspectos principales solicitados por la rúbrica, garantizando fluidez, consumo de API, subida de imágenes y diseño consistente.
-
----
-
 ## 👨‍💻 Autor
 
 - **Nombre:** Fernando Condori Godoy
-- **Materia:** Desarrollo de Software para Móviles  
-- **Año:** 2025  
-- **Cátedra:** Cátedra 3
+- **Materia:** Desarrollo de Soluciones Móviles  
